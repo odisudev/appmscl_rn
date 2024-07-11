@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">대한예수교장로회 명성교회 도서관</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">sXsKCnPEZ5Q05kpd5VvOzkXAcucbIFSEr_4r4</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+    <string name="Loc">MSCL</string>
+    <string name="Url2">http://www.mslib.or.kr/</string>
+    <string name="Server">www.mslib.or.kr</string>
+    <string name="alert_dialog_ok">확인</string>
+    <string name="alert_dialog_cancel">취소</string>
+    <string name="str_close">닫기</string>
+</resources>
+

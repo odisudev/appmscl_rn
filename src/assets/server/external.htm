@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        .outer {
+            display: table;
+            width: 100%;
+            height: 100%;
+        }
+
+        .inner {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .loadingBar {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 60px; /*width: 33px;height: 34px;background: url(ld_sq2.png) no-repeat 0 0;*/
+            _background: none;
+            _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='ld_sq2.png',sizingMethod= 'crop' );
+        }
+
+            .loadingBar img {
+                margin: 8px;
+            }
+
+        .msg {
+            display: block;
+            padding-top: 10px;
+            font-family: '굴림',gulim,helvetica,sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            word-spacing: -1px;
+            letter-spacing: -1px;
+            color: #6b6d70;
+        }
+    </style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript">
+
+        function getUrlParameter(sParam) {
+
+            var sPageURL = window.location.search.substring(1),
+				sURLVariables = sPageURL.split('&');
+
+            for (var i = 0; i < sURLVariables.length; i++) {
+                var sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] == sParam) return sParameterName[1];
+            }
+        }
+
+        fncEnCode = function (param) {
+
+            var encode = '';
+
+            for (i = 0; i < param.length; i++) {
+                var len = '' + param.charCodeAt(i),
+					token = '' + len.length;
+
+                encode += token + param.charCodeAt(i);
+            }
+            return encode;
+        }
+
+        function PostRequest(obj, url, target, isCharset) {
+
+            var f = document.createElement('form'),
+				objs, value;
+
+            if (isCharset) document.charset = 'euc-kr';
+
+            for (var key in obj) {
+                value = obj[key];
+                objs = document.createElement('input');
+                objs.setAttribute('type', 'hidden');
+                objs.setAttribute('name', key);
+
+                if (key == 'UserName') {
+                    objs.setAttribute('value', fncEnCode(value));
+                }
+                else {
+                    objs.setAttribute('value', value);
+                }
+
+                f.appendChild(objs);
+            }
+
+            f.setAttribute('method', 'post');
+            f.setAttribute('action', url);
+
+            if (target != '') f.setAttribute('target', target);
+
+            document.body.appendChild(f);
+
+            f.submit();
+        }
+
+        function dbpia_open(b2bId, returnUrl) {
+            var frm = document.createElement('form');
+            var input1 = document.createElement('input');
+            var input2 = document.createElement('input');
+
+            if (typeof b2bId == "undefined")
+                b2bId = '';
+
+            if (typeof returnUrl == "undefined")
+                returnUrl = '';
+
+            frm.style.display = 'none';
+            input1.setAttribute('name', 'b2bId');
+            input2.setAttribute('name', 'returnUrl');
+            input1.setAttribute('value', b2bId);
+            input2.setAttribute('value', returnUrl);
+            frm.appendChild(input1);
+            frm.appendChild(input2);
+            document.body.appendChild(frm);
+
+            frm.setAttribute('method', 'post');
+
+            frm.setAttribute('action', 'http://m.dbpia.co.kr/member/login_proc_outConn.asp');
+
+            /*if (returnUrl == 'm.dbpia.co.kr')
+					frm.setAttribute('action', 'http://m.dbpia.co.kr/member/login_proc_outConn.asp');
+			else{
+				if(b2bId == '768' || b2bId == '1297' || b2bId == '662' || b2bId == '3458' || b2bId == '1764' || b2bId == '972' || b2bId == '768' || b2bId == '2368')
+					frm.setAttribute('action', 'https://www.dbpia.co.kr/member/login_proc_outConn.asp');
+				else
+					frm.setAttribute('action', 'http://www.dbpia.co.kr/member/login_proc_outConn.asp');
+			}
+
+			frm.setAttribute('target', '_blank');*/
+
+            if (b2bId == '') {
+                if (returnUrl != '')
+                    window.open(returnUrl);
+                else
+                    window.open('http://www.dbpia.co.kr');
+            }
+            else {
+                frm.submit();
+                //		parent.window.location.assign("http://www.dbpia.co.kr/member/login_proc_outConn.asp?b2bId="+b2bId+"&returnUrl="+returnUrl);
+            }
+        }
+
+		function getKissKey() {
+			var _date = new Date();
+			var _year = _date.getFullYear();
+			var _month = '' + (_date.getMonth() + 1);
+			var _day = '' + _date.getDate();
+			var _hour = _date.getHours();
+			var _min = _date.getMinutes();
+			var _sec = _date.getSeconds();
+
+			if (_month.length == 1)
+				_month = '0' + _month;
+			if (_day.length == 1)
+				_day = '0' + _day;
+			if (_hour.length == 1)
+				_hour = '0' + _hour;
+			if (_min.length == 1)
+				_min = '0' + _min;
+
+			var strTemp1 = _year + _month + _day + _hour + _min;
+			strTemp1 = strTemp1.substring(2);
+			var key_temp = '';
+
+			for (var i = 0; i < strTemp1.length; i++) {
+				key_temp = strTemp1.substr(i, 1) + '' + key_temp;
+
+				if (i == 0) {
+					key_temp = 310 + '' + key_temp;
+				}
+				if (i == 2) {
+
+					key_temp = 580 + '' + key_temp;
+
+				}
+				if (i == 8) {
+					key_temp = (620 + _sec) + '' + key_temp;
+				}
+			}
+
+			return key_temp;
+		}
+
+        $(function () {
+
+            $('.inner').height($(window).height());
+
+            //loading = $('<div class="loadingBar"><img src="ico_ld_cen.gif" width="17" height="17" alt="로딩중"></div><span class="msg">준비 중입니다. 잠시만 기다리세요.</span>')
+            var timer,
+				loading = $('<div class="loadingBar"><img src="ajax-loader.gif" width="50" height="50" alt="로딩중"></div><span class="msg">준비 중입니다. 잠시만 기다리세요.</span>')
+				.appendTo($('.inner')).show();
+
+            var method = getUrlParameter('method');
+
+            switch (method.toLowerCase()) {
+                case 'bookcube':
+                    memberId = decodeURI(getUrlParameter('uid'));
+                    memberName = decodeURI(getUrlParameter('name'));
+					memberCcCode = decodeURI(getUrlParameter('cccode'));
+					memberCcName = decodeURI(getUrlParameter('ccname'));
+
+                    timer = setInterval(function () {						
+						location.href = 'http://mslib.or.kr:8088/FxLibrary/dependency/sso/sso.jsp' + memberId + '&user_pw=&user_nm=' + memberName + '&user_group=' + memberCcCode +'&user_group_name=' + memberCcName
+                    }, 1500);
+                    break;
+				case 'audio':
+					memberId = decodeURI(getUrlParameter('uid'));
+					timer = setInterval(function () {
+                        location.href = 'https://wasp.audien.com/wpoc/main.htm?paId=2435f022435f0890d7c0&userId=' + memberId;
+                    }, 1500);
+					break;
+                case 'ebookd':
+                    memberId = decodeURI(getUrlParameter('uid'));
+                    memberName = decodeURI(getUrlParameter('name'));
+                    bookNum = decodeURI(getUrlParameter('booknum'));
+
+                    timer = setInterval(function () {
+                        location.href = 'http://ebook.kmcu.ac.kr:8080/FxLibrary/dependency/sso/sso.jsp?param_1=' + memberId + '&param_2=' + memberId + '&param_3=' + memberName + '&book_num=' + bookNum;
+                    }, 1500);
+                    break;
+                case 'eduwill':
+                    var url = 'http://kmcu.eduwill.net/member/loginSSOCheck.will',
+						userid = decodeURI(getUrlParameter('uid')),
+						name = decodeURI(getUrlParameter('name')),
+						params = { 'UserName': name, 'enc': '1', 'JisaCode': 'hanseo', 'UserID': userid, 'UserName_client': name };
+                    PostRequest(params, url, '', false);
+                    break;
+				case 'elearning':
+                    memberId = decodeURI(getUrlParameter('uid'));
+                    memberName = decodeURI(getUrlParameter('name'));
+					timer = setInterval(function () {
+						location.href = 'http://ktc.cplcms.co.kr/php_lcms/loginok.php?user_id=' + memberId + '&user_name=' + memberName;
+					}, 1500);
+					break;
+				case 'darakwon':
+                    memberId = decodeURI(getUrlParameter('uid'));
+                    location.href = 'http://m.lms.darakwon.co.kr/kmculib/msso.asp?uid=' + memberId;
+                    break;
+                case 'dbpia':
+                    timer = setInterval(function () {
+                        dbpia_open(1639);
+                    }, 1500);
+                    break;   
+				case 'kiss':
+                    location.href = 'http://kiss.kstudy.com/?c_code=' + getKissKey() + '&code=1131';
+                    break;
+				case 'book_cosmos':
+					var url = 'http://kmcc.bookcosmos.com/cookie_enc.asp',
+						userid = decodeURI(getUrlParameter('uid')),
+						name = decodeURI(getUrlParameter('name')),
+						params = { 'bkUserId': userid, 'bkUserName': name, 'bkUserPwd': 'kmc61201n' };
+                    PostRequest(params, url, '', false);
+					break;
+				case 'magazine':
+					location.href = 'http://dl.moazine.com/lib/?dl=9MtJb2T3nzH36ySWs0TkNF249PZgo3r4kD23';
+					break
+                case 'proxy':
+                    var tag = document.createElement('script'),
+						userid = decodeURI(getUrlParameter('uid')),
+						name = decodeURI(getUrlParameter('name')),
+						cccode = decodeURI(getUrlParameter('cccode')),
+						chcode = decodeURI(getUrlParameter('chcode')),
+						proxyUrl = 'http://openlink.library.kmcu.ac.kr/authapi.cgi?u=login&uid=' + userid + '&uname=' + name + '&uposition=' + cccode + '&ustatus=' + chcode + '&apitype=sp',
+						url = decodeURI(getUrlParameter('url'));
+
+
+                    tag.id = 'authapi';
+                    tag.src = proxyUrl;
+
+                    document.body.appendChild(tag);
+
+                    timer = setInterval(function () {
+                        goPage();
+
+                    }, 1500);
+
+                    function goPage() {
+
+                        clearInterval(timer);
+                        location.href = 'http://openlink.library.kmcu.ac.kr/link.cgi?url=' + url;
+                    }
+
+                    break;
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="outer">
+        <div class="inner">
+        </div>
+    </div>
+</body>
+</html>
