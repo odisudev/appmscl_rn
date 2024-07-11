@@ -13,7 +13,7 @@ const Settings = () => {
       data: [
         //{ "navi": "SetBeacon", "name": "좌석예약 위치인증", "icon": "mobile1", "color": '#000' },
         { "navi": "SetAutoLogin", "name": "자동 로그인", "icon": "login", "color": "#43D751" },
-        { "navi": "SetAlarm", "name": "알림 설정", "icon": "bells", "color": "#FF9501" },
+        //{ "navi": "SetAlarm", "name": "알림 설정", "icon": "bells", "color": "#FF9501" },
         // { "navi": "SetMCard", "name": "대출증 설정", "icon": "idcard", "color": "#7C7B81" }
       ],
     }
