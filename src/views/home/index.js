@@ -29,110 +29,6 @@ const Home = ({ route, navigation }) => {
     }
   }
 
-  const chkUser = async () => {
-    const userInfo = await AsyncStorage.getItem("appmscl");
-    if (userInfo) {
-      const autoLogin = await AsyncStorage.getItem("appAUTOLOGIN");
-      if (autoLogin && autoLogin === "true") {
-        const userData = await APILogin.AutoLogin(userInfo.replaceAll('"',''));
-        if (userData && userData.MobileMemberResult) {
-          // console.warn("재직/재학 이외 이용자는 강제 로그아웃");
-          // console.warn("기본은 CFYN 가 Y 인 이용자만 사용, 기관에 맞게 커스트마이징 하면 될듯.");
-          if (userData.MobileMemberResult.CFYN === "Y") {
-            setUserState((old) => ({
-              loc2: userData.MobileMemberResult.Loc2,
-              userImage: userData.MobileMemberResult.ImageFile,
-              idno: userData.MobileMemberResult.Idno,
-              name: userData.MobileMemberResult.Name,
-              ccCode: userData.MobileMemberResult.CcCode,
-              ccName: userData.MobileMemberResult.CcName,
-              cdCode: userData.MobileMemberResult.CdCode,
-              cdName: userData.MobileMemberResult.CdName,
-              chCode: userData.MobileMemberResult.ChCode,
-              chName: userData.MobileMemberResult.ChName,
-              useChk: userData.MobileMemberResult.UseIDYN,
-              cfYN: userData.MobileMemberResult.CFYN,
-              cnt: userData.MobileMemberResult.Cnt,
-              memberFrDT: userData.MobileMemberResult.MemberFrDT,
-              memberToDT: userData.MobileMemberResult.MemberToDT,
-              mobileTel: userData.MobileMemberResult.MobileTel,
-              tel: userData.MobileMemberResult.Tel,
-              rfid: userData.MobileMemberResult.RFID,
-              isAdmin: userData.MobileMemberResult.isAdmin,
-              giganChk: userData.MobileMemberResult.GiganChk
-            }));
-          }
-          else {
-            Alert.alert(
-              "로그인",
-              "재학/재직자 이외는 강제 로그아웃 됩니다.",
-              [
-                {
-                  text: "확인",
-                  onPress: () => {
-                    AsyncStorage.removeItem('appmscl');
-                  }
-                }
-              ],
-              { cancelable: false }
-            ); 
-          }
-        }
-      }
-      if (autoLogin && autoLogin === "false" && !appLoginState.idno) {
-        AsyncStorage.removeItem('appmscl');
-        setUserState((old) => ({
-          loc2: null,
-          userImage: null,
-          idno: null,
-          name: null,
-          ccCode: null,
-          ccName: null,
-          cdCode: null,
-          cdName: null,
-          chCode: null,
-          chName: null,
-          useChk: null,
-          cfYN: null,
-          cnt: null,
-          memberFrDT: null,
-          memberToDT: null,
-          mobileTel: null,
-          tel: null,
-          rfid: null,
-          isAdmin: null,
-          giganChk: null
-        }));
-      }
-    }
-    else {
-      AsyncStorage.removeItem('appmscl');
-      setUserState((old) => ({
-        loc2: null,
-        userImage: null,
-        idno: null,
-        name: null,
-        ccCode: null,
-        ccName: null,
-        cdCode: null,
-        cdName: null,
-        chCode: null,
-        chName: null,
-        useChk: null,
-        cfYN: null,
-        cnt: null,
-        memberFrDT: null,
-        memberToDT: null,
-        mobileTel: null,
-        tel: null,
-        rfid: null,
-        isAdmin: null,
-        giganChk: null
-      }));
-    }
-  }
-
-
   const getLentData = async () => {
     if (getUserState) {
       const item = await APILibrary.GetLentStatus(getUserState.idno);
@@ -141,6 +37,7 @@ const Home = ({ route, navigation }) => {
       }
     }
   };
+
 
   useEffect(() => {
     getLentData();

@@ -29,169 +29,6 @@ const Login = (props) => {
     onPress: null
   });
 
-
-  const permissionChk = async () => {
-    let permissions = [];
-    await checkMultiple([PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION, PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, PERMISSIONS.ANDROID.BLUETOOTH_SCAN, PERMISSIONS.ANDROID.BLUETOOTH_CONNECT]).then((statuses) => {
-      switch (statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]) {
-        case RESULTS.BLOCKED:
-        case RESULTS.DENIED:
-        case RESULTS.UNAVAILABLE:
-          permissions.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
-          break;
-      }
-      switch (statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT]) {
-        case RESULTS.BLOCKED:
-        case RESULTS.DENIED:
-        case RESULTS.UNAVAILABLE:
-          permissions.push(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT);
-          break;
-      }
-
-      requestMultiple(permissions);
-    });
-  }
-
-  const chkUser = async () => {
-    const userInfo = await AsyncStorage.getItem("appmscl");
-    if (userInfo) {
-      const autoLogin = await AsyncStorage.getItem("appAUTOLOGIN");
-      if (autoLogin && autoLogin === "true") {
-        const userData = await APILogin.AutoLogin(userInfo.replaceAll('"',''));
-        if (userData && userData.MobileMemberResult) {
-          // console.warn("재직/재학 이외 이용자는 강제 로그아웃");
-          // console.warn("기본은 CFYN 가 Y 인 이용자만 사용, 기관에 맞게 커스트마이징 하면 될듯.");
-          if (userData.MobileMemberResult.CFYN === "Y") {
-            setUserState((old) => ({
-              loc2: userData.MobileMemberResult.Loc2,
-              userImage: userData.MobileMemberResult.ImageFile,
-              idno: userData.MobileMemberResult.Idno,
-              name: userData.MobileMemberResult.Name,
-              ccCode: userData.MobileMemberResult.CcCode,
-              ccName: userData.MobileMemberResult.CcName,
-              cdCode: userData.MobileMemberResult.CdCode,
-              cdName: userData.MobileMemberResult.CdName,
-              chCode: userData.MobileMemberResult.ChCode,
-              chName: userData.MobileMemberResult.ChName,
-              useChk: userData.MobileMemberResult.UseIDYN,
-              cfYN: userData.MobileMemberResult.CFYN,
-              cnt: userData.MobileMemberResult.Cnt,
-              memberFrDT: userData.MobileMemberResult.MemberFrDT,
-              memberToDT: userData.MobileMemberResult.MemberToDT,
-              mobileTel: userData.MobileMemberResult.MobileTel,
-              tel: userData.MobileMemberResult.Tel,
-              rfid: userData.MobileMemberResult.RFID,
-              isAdmin: userData.MobileMemberResult.isAdmin,
-              giganChk: userData.MobileMemberResult.GiganChk
-            }));
-
-
-            if (userData && userData.MobileMemberResult.Idno) {
-              const result = await APIUnipass.GetUserConf(Config.LOC, userData.MobileMemberResult.Idno, Platform.OS.toUpperCase());
-                setDialog({
-                  visible: true,
-                  message: '기기 인증 정보가 없습니다.\n재인증 하시겠습니까?',
-                  onPress: async () => {
-                    //기기 재인증
-                    try {
-                      const response = await APIUnipass.SaveTaskReserve(Config.LOC, userData.MobileMemberResult.Idno, uuid, Platform.OS.toUpperCase());
-                      if (response) {
-                        Alert.alert('알림', response.SaveTaskReserveResult);
-                      }
-                      else {
-                        Alert.alert("오류", "저장에 실패하였습니다.\n관리자에게 문의 바랍니다.");
-                      }
-                    }
-                    catch {
-                      Alert.alert("오류", "저장에 실패하였습니다.\n관리자에게 문의 바랍니다.");
-                    }
-                    finally {
-                      setDialog({ ...dialog, visible: false });
-                    }
-                  }
-                });
-            }
-
-          }
-          else {
-            Alert.alert(
-              "로그인",
-              "재학/재직자 이외는 강제 로그아웃 됩니다.",
-              [
-                {
-                  text: "확인",
-                  onPress: () => {
-                    AsyncStorage.removeItem('appmscl');
-                    AsyncStorage.removeItem('');
-                  }
-                }
-              ],
-              { cancelable: false }
-            ); 
-          }
-        }
-      }
-      if (autoLogin && autoLogin === "false" && !appLoginState.idno) {
-        AsyncStorage.removeItem('appmscl');
-        setUserState((old) => ({
-          loc2: null,
-          userImage: null,
-          idno: null,
-          name: null,
-          ccCode: null,
-          ccName: null,
-          cdCode: null,
-          cdName: null,
-          chCode: null,
-          chName: null,
-          useChk: null,
-          cfYN: null,
-          cnt: null,
-          memberFrDT: null,
-          memberToDT: null,
-          mobileTel: null,
-          tel: null,
-          rfid: null,
-          isAdmin: null,
-          giganChk: null
-        }));
-      }
-    }
-    else {
-      AsyncStorage.removeItem('appmscl');
-      setUserState((old) => ({
-        loc2: null,
-        userImage: null,
-        idno: null,
-        name: null,
-        ccCode: null,
-        ccName: null,
-        cdCode: null,
-        cdName: null,
-        chCode: null,
-        chName: null,
-        useChk: null,
-        cfYN: null,
-        cnt: null,
-        memberFrDT: null,
-        memberToDT: null,
-        mobileTel: null,
-        tel: null,
-        rfid: null,
-        isAdmin: null,
-        giganChk: null
-      }));
-    }
-  }
-
-
-  const loginDesc = async () => {
-    const item = await fetch(Config.APP_CONFIG_URL).then((res) => res.json());
-    if (item != null && item.logindesc.length > 0) {
-      setTxtDesc(item.logindesc[0].description);
-    }
-  }
-
   const onChangeIcon = () => {
     setPwVisible({
       icon: pwVisible.icon === 'eye' ? 'eye-off' : 'eye',
@@ -205,7 +42,6 @@ const Login = (props) => {
     try {
       const result = await APILogin.Login(txtIdno, txtPW);
       const data = result.MobileLoginResult;
-
       if (data.Idno) {
         const userPicture = await APILogin.GetUserPicture(data.Idno);
         setAppLoginState({ idno: data.Idno });
@@ -243,6 +79,11 @@ const Login = (props) => {
           [{ text: '확인', onPress: () => {
             new Promise(async (resolve, reject) => {
               try {
+                await messaging()
+                .getToken()
+                .then(token => {
+                  return saveTokenToDatabase(data.Idno, token);
+                });
                 resolve(uuid);
               }
               catch(e) {
@@ -259,7 +100,6 @@ const Login = (props) => {
                       permissions.push(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
                       break;
                   }
-
                   switch (statuses[PERMISSIONS.IOS.LOCATION_ALWAYS]) {
                     case RESULTS.GRANTED:
                     case RESULTS.DENIED:
@@ -321,73 +161,7 @@ const Login = (props) => {
                             break;
                         }
                       });
-
-                      if (items.length > 0) {
-                        globalAlert({
-                          visible: true,
-                          message: '위치 권한을 항상 허용으로 설정하시면 앱을 종료하셔도 인증이 가능합니다.',
-                          onPress: async () => {
-                            try {
-                              await requestMultiple(items)
-                            }
-                            catch {
-                            }
-                            finally {
-                            }
-                          }
-                        });
-                      }
                     });
-                  }
-                });
-              }
-
-              const result = await APIUnipass.GetUserConf(Config.LOC, data.Idno, Platform.OS.toUpperCase());
-              if (result && result.GetUserConfResult) {
-                if (result.GetUserConfResult.UID !== uuid && data.Idno !== '2999') {
-                  globalAlert({
-                    visible: true,
-                    message: '기존 인증된 기기가 아닙니다.\n재인증 하시겠습니까?',
-                    onPress: () => {
-                      //기기 재인증
-                      new Promise((resolve, reject) => {
-                        try {
-                          const response = APIUnipass.SaveTaskReserve(Config.LOC, data.Idno, uuid, Platform.OS.toUpperCase());
-                          resolve(response);
-                        }
-                        catch (ex) {
-                          reject(ex);
-                        }
-                      }).then((value) => {
-                        Alert.alert("알림", "저장완료");
-                      }).catch((e) => {
-                        Alert.alert("오류", "저장에 실패하였습니다.\n관리자에게 문의 바랍니다.");
-                      });
-                    }
-                  });
-                }
-                else {
-                }
-              }
-              else {
-                globalAlert({
-                  visible: true,
-                  message: '인증되지 않은 기기입니다.\n확인 버튼을 눌러서 기기인증을 해주세요.',
-                  onPress: () => {
-                    //기기 인증
-                    new Promise((resolve, reject) => {
-                      try {
-                        const response = APIUnipass.SaveUserConf(Config.LOC, data.Idno, uuid, Platform.OS.toUpperCase());
-                        resolve(response);
-                      }
-                      catch (e) {
-                        reject(e)
-                      }
-                    }).then((response) => {
-                      Alert.alert('알림', '저장완료')
-                    }).catch((reason) => {
-                      Alert.alert("오류", "저장에 실패하였습니다.\n관리자에게 문의 바랍니다.");
-                    })
                   }
                 });
               }
@@ -420,12 +194,113 @@ const Login = (props) => {
     }
   };
 
-  const saveTokenToDatabase = (userId, token) => {
-    if (userId) {
-      //console.log(userId, token);
-      APIUnipass.SaveGcmUsers(Config.LOC, userId, Platform.OS.toUpperCase(), token);
+  const chkUser = async () => {
+    const userInfo = await AsyncStorage.getItem("appmscl");
+    if (userInfo) {
+      const autoLogin = await AsyncStorage.getItem("appAUTOLOGIN");
+      if (autoLogin && autoLogin === "true") {
+        const userData = await APILogin.AutoLogin(userInfo.replaceAll('"',''));
+        if (userData && userData.MobileMemberResult) {
+          // console.warn("재직/재학 이외 이용자는 강제 로그아웃");
+          // console.warn("기본은 CFYN 가 Y 인 이용자만 사용, 기관에 맞게 커스트마이징 하면 될듯.");
+          if (userData.MobileMemberResult.CFYN === "Y") {
+            setUserState((old) => ({
+              loc2: userData.MobileMemberResult.Loc2,
+              userImage: userData.MobileMemberResult.ImageFile,
+              idno: userData.MobileMemberResult.Idno,
+              name: userData.MobileMemberResult.Name,
+              ccCode: userData.MobileMemberResult.CcCode,
+              ccName: userData.MobileMemberResult.CcName,
+              cdCode: userData.MobileMemberResult.CdCode,
+              cdName: userData.MobileMemberResult.CdName,
+              chCode: userData.MobileMemberResult.ChCode,
+              chName: userData.MobileMemberResult.ChName,
+              useChk: userData.MobileMemberResult.UseIDYN,
+              cfYN: userData.MobileMemberResult.CFYN,
+              cnt: userData.MobileMemberResult.Cnt,
+              memberFrDT: userData.MobileMemberResult.MemberFrDT,
+              memberToDT: userData.MobileMemberResult.MemberToDT,
+              mobileTel: userData.MobileMemberResult.MobileTel,
+              tel: userData.MobileMemberResult.Tel,
+              rfid: userData.MobileMemberResult.RFID,
+              isAdmin: userData.MobileMemberResult.isAdmin,
+              giganChk: userData.MobileMemberResult.GiganChk
+            }));
+          }
+          else {
+            Alert.alert(
+              "로그인",
+              "재학/재직자 이외는 강제 로그아웃 됩니다.",
+              [
+                {
+                  text: "확인",
+                  onPress: () => {
+                    AsyncStorage.removeItem('appmscl');
+                  }
+                }
+              ],
+              { cancelable: false }
+            ); 
+          }
+        }
+      }
+      if (autoLogin && autoLogin === "false" && !appLoginState.idno) {
+        AsyncStorage.removeItem('appmscl');
+        setUserState((old) => ({
+          loc2: null,
+          userImage: null,
+          idno: null,
+          name: null,
+          ccCode: null,
+          ccName: null,
+          cdCode: null,
+          cdName: null,
+          chCode: null,
+          chName: null,
+          useChk: null,
+          cfYN: null,
+          cnt: null,
+          memberFrDT: null,
+          memberToDT: null,
+          mobileTel: null,
+          tel: null,
+          rfid: null,
+          isAdmin: null,
+          giganChk: null
+        }));
+      }
+    }
+    else {
+      AsyncStorage.removeItem('appmscl');
+      setUserState((old) => ({
+        loc2: null,
+        userImage: null,
+        idno: null,
+        name: null,
+        ccCode: null,
+        ccName: null,
+        cdCode: null,
+        cdName: null,
+        chCode: null,
+        chName: null,
+        useChk: null,
+        cfYN: null,
+        cnt: null,
+        memberFrDT: null,
+        memberToDT: null,
+        mobileTel: null,
+        tel: null,
+        rfid: null,
+        isAdmin: null,
+        giganChk: null
+      }));
     }
   }
+
+  useEffect(() => {
+    chkUser();
+    return () => {}
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

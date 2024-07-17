@@ -4,12 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AutoLoginset = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-
+    
   useEffect(() => {
     const chkAutoLogin = () => {
       setTimeout(async () => {
-        const isAutoLogin = await AsyncStorage.getItem("appAUTOLOGIN");
-        if (isAutoLogin && isAutoLogin === "true") {
+        const isAutoLogin = await AsyncStorage.getItem("appAUTOLOGIN"); 
+        if (isAutoLogin === "true") {
           setIsEnabled(true);
         }
         else {
@@ -45,6 +45,8 @@ const AutoLoginset = () => {
             ios_backgroundColor="#3e3e3e"
             onValueChange={(auto) => { toggleSwitch(auto) }}
             value={isEnabled}>
+              {console.log('isEnabled = ')}
+              {console.log(isEnabled)}
           </Switch>
         </View>
       </View>

@@ -24,7 +24,6 @@ import Settings from './settings';
 import AutoLoginSet from './settings/autoLoginset';
 import AlarmSet from './settings/alarmset';
 import McardSet from './settings/mcardset';
-import BeaconSet from './settings/beaconSet';
 
 
 import MCard from './mcard';
@@ -34,6 +33,7 @@ LogBox.ignoreLogs([
   'Sending',
   'new NativeEventEmitter',
 ]);
+
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -60,7 +60,7 @@ const MainTabs = (props) => {
         tabBarStyle: {
           height: Platform.OS === 'ios' ? 100 : 80,
           backgroundColor: 'rgba(252, 249, 252, 1)',
-          borderTopWidth: 0
+          borderTopWidth: 0,
         }
       })}>
       <BottomTab.Screen
@@ -71,18 +71,19 @@ const MainTabs = (props) => {
             height: Platform.OS === 'ios' ? 100 : 80,
             display: userInfo ? 'flex' : 'none'
           },
-          headerTitle: '모바일 회원증',
+          headerTitle: "모바일 회원증",
+          headerTitleAlign: 'center',
           tabBarShowLabel: false,
           tabBarIcon: ({ color, focused }) =>
             focused ? (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <AntDesign name={'idcard'} size={40} color="#15508e" />
-                <Text style={{ color: '#15508e' }}>학생증</Text>
+                <Text style={{ color: '#15508e' }}>회원증</Text>
               </View>
             ) : (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <AntDesign name={'idcard'} size={40} color="#000" />
-                <Text style={{ color: '#000' }}>학생증</Text>
+                <Text style={{ color: '#000' }}>회원증</Text>
               </View>
             ),
         })}
@@ -96,6 +97,7 @@ const MainTabs = (props) => {
             display: userInfo ? 'flex' : 'none'
           },
           headerTitle: '설정',
+          headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity style={styles.headerLeft} onPress={() => navigation.goBack()}>
               <Ionicons name="chevron-back" size={29} color="black" />
@@ -143,11 +145,6 @@ const MainNavigator = () => {
         component={Settings}
         options={({ navigation }) => ({
           headerTitle: '환경설정', headerBackTitleVisible: false,
-          headerRight: () => (
-            <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate("Search")}>
-              <MaterialCommunityIcons name="magnify" size={32} color="black" />
-            </TouchableOpacity>
-          ),
         })}
       />
       <Stack.Screen
@@ -189,7 +186,6 @@ const MainNavigator = () => {
           ),
         })}
       />
-
     </Stack.Navigator>
   )
 }
@@ -226,5 +222,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 5
     //borderWidth: 1
-  }
+  },
 })

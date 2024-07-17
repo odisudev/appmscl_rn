@@ -167,12 +167,12 @@ const UserQRBarCode = (props) => {
             </View>
             {qrEncrypt && state.status === "TIMER" && (
             <View style={styles.timer}>
-              <Text style={{ fontSize: 20, color: "#000" , marginTop: 5 }}>{hhmmss(state?.seconds)}</Text>
+              <Text style={{ fontSize: 18, color: "#000" }}>{hhmmss(state?.seconds)}</Text>
             </View>
           )}
           {qrEncrypt && state.status === "BLOCK" &&
             <View style={styles.timer}>
-              <Text style={{ fontSize: 22 }}>{" "}</Text>
+              <Text style={{ fontSize: 18 }}>{" "}</Text>
             </View>
           }
           </View>

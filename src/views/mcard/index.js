@@ -30,14 +30,8 @@ const MCard = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.container}>
       <ScrollView style={styles.cardBox}>
-         {/* <View style={styles.header}>
-          <Text style={{ color: '#fff', fontSize: 14 }}>{cardTitle}</Text>
-        </View>  */}
         <View style={styles.contents}>
           <View style={styles.user}>
-            <View style={{ margin: 15 }}>
-              <UserPicture />
-            </View>
             <View style={{ marginTop: 15 }}>
               <View style={styles.userText}>
                 <Text style={styles.contentT}>이름</Text>
@@ -48,7 +42,7 @@ const MCard = ({ navigation }) => {
                 <Text style={styles.contentC}>{userInfo.idno}</Text>
               </View>
               <View style={styles.userText}>
-                <Text style={styles.contentT}>학과</Text>
+                <Text style={styles.contentT}>소속</Text>
                 <Text style={styles.contentC}>{userInfo.cdName}</Text>
               </View>
               <View style={styles.userText}>
@@ -64,7 +58,6 @@ const MCard = ({ navigation }) => {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: 10,
               marginBottom: 20,
             }}>
             <Image
@@ -111,6 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#15508e',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 19,
     //borderBottomStartRadius: 6,
     //borderBottomEndRadius: 6
   },
@@ -146,7 +140,6 @@ const styles = StyleSheet.create({
   qrbarcode: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
     marginBottom: 50,
   },
 });
