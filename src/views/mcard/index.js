@@ -38,7 +38,7 @@ const MCard = ({ navigation }) => {
                 <Text style={styles.contentC}>{userInfo.name}</Text>
               </View>
               <View style={styles.userText}>
-                <Text style={styles.contentT}>학번</Text>
+                <Text style={styles.contentT}>회원번호</Text>
                 <Text style={styles.contentC}>{userInfo.idno}</Text>
               </View>
               <View style={styles.userText}>
