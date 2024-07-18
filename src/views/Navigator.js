@@ -153,24 +153,6 @@ const MainNavigator = () => {
         options={({ navigation }) => ({
           title: '자동 로그인',
           headerBackTitleVisible: false,
-          headerRight: () => (
-            <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate("Search")}>
-              <MaterialCommunityIcons name="magnify" size={32} color="black" />
-            </TouchableOpacity>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="alarmset"
-        component={AlarmSet}
-        options={({ navigation }) => ({
-          title: '알림 설정',
-          headerBackTitleVisible: false,
-          headerRight: () => (
-            <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate("Search")}>
-              <MaterialCommunityIcons name="magnify" size={32} color="black" />
-            </TouchableOpacity>
-          ),
         })}
       />
       <Stack.Screen

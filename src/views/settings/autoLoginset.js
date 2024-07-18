@@ -45,8 +45,6 @@ const AutoLoginset = () => {
             ios_backgroundColor="#3e3e3e"
             onValueChange={(auto) => { toggleSwitch(auto) }}
             value={isEnabled}>
-              {console.log('isEnabled = ')}
-              {console.log(isEnabled)}
           </Switch>
         </View>
       </View>

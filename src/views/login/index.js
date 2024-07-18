@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Alert, Keyboard, Text, Switch, StyleSheet, Image, ScrollView, Platform, NativeModules } from 'react-native';
-import { check, request, checkMultiple, requestMultiple, PERMISSIONS, RESULTS, checkNotifications, requestNotifications } from 'react-native-permissions';
 import { setUser, setAppLogin } from '../../store';
 import * as Components from './components';
 import Loading from '../Loading';
@@ -71,105 +70,9 @@ const Login = (props) => {
           giganChk: data.GiganChk
         });
 
-        //navigation.goBack();
-
         Alert.alert(
           '로그인',
-          `${data.Name}님 환영합니다.`,
-          [{ text: '확인', onPress: () => {
-            new Promise(async (resolve, reject) => {
-              try {
-                await messaging()
-                .getToken()
-                .then(token => {
-                  return saveTokenToDatabase(data.Idno, token);
-                });
-                resolve(uuid);
-              }
-              catch(e) {
-                reject(e);
-              }
-            })
-            .then(async (uuid) => {              
-              const permissions = [];
-              if (Platform.OS === 'ios') {
-                await checkMultiple([PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, PERMISSIONS.IOS.LOCATION_ALWAYS]).then((statuses) => {
-                  switch (statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]) {
-                    case RESULTS.GRANTED:
-                    case RESULTS.DENIED:
-                      permissions.push(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-                      break;
-                  }
-                  switch (statuses[PERMISSIONS.IOS.LOCATION_ALWAYS]) {
-                    case RESULTS.GRANTED:
-                    case RESULTS.DENIED:
-                      permissions.push(PERMISSIONS.IOS.LOCATION_ALWAYS);
-                      break;
-                  }
-                });
-                await requestMultiple(permissions).then((value) => {
-                });
-              }
-              else {
-                new Promise(async (resolve, reject) => {
-                  await checkNotifications().then(({status, settings}) => {
-                    if (status !== RESULTS.GRANTED) {
-                      requestNotifications(['alert', 'sound']);
-                      resolve();
-                    }
-                    else {
-                      resolve();
-                    }
-                  });
-                })
-                .then(async () => {
-                  await checkMultiple([
-                    PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION, 
-                    PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, 
-                    PERMISSIONS.ANDROID.BLUETOOTH_SCAN])
-                    .then((statuses) => {
-                    switch (statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION]) {
-                      case RESULTS.DENIED:
-                      case RESULTS.BLOCKED:
-                        permissions.push(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
-                        break;
-                    }
-
-                    switch (statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]) {
-                      case RESULTS.DENIED:
-                      case RESULTS.BLOCKED:
-                        permissions.push(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-                        break;
-                    }
-
-                    switch (statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]) {
-                      case RESULTS.DENIED:
-                      case RESULTS.BLOCKED:
-                        permissions.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
-                        break;
-                    }
-                  });
-
-                  if (permissions.length > 0) {
-                    const items = [];
-                    await requestMultiple(permissions).then(async () => {
-                      await checkMultiple([PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION]).then((statuses) => {
-                        switch (statuses[PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION]) {
-                          case RESULTS.DENIED:
-                          case RESULTS.BLOCKED:
-                            items.push(PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION);
-                            break;
-                        }
-                      });
-                    });
-                  }
-                });
-              }
-            })
-          }
-          }],
-          { cancelable: false },
-        );
+          `${data.Name}님 환영합니다.`);
   
         setIsLoading(false);
 

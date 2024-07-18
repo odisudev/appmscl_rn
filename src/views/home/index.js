@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { View, SafeAreaView, StyleSheet, Alert, TouchableOpacity, Platform, ImageBackground, NativeModules } from 'react-native';
-import { check, request, checkMultiple, requestMultiple, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Menu, Banner } from './components';
 import { Config, APILogin, APIBoard, APIUnipass, APILibrary } from '../../service';
 import { setUser, getUser, getAppLogin } from '../../store';

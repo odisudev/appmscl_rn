@@ -11,7 +11,6 @@ import { RecoilRoot } from 'recoil';
 import Navigator from './src/views/Navigator';
 import { Provider, MD3LightTheme } from 'react-native-paper';
 import CodePush from 'react-native-code-push';
-import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const codePushOptions = {
   // 언제 업데이트를 체크하고 반영할지를 정한다.
@@ -36,24 +35,6 @@ function App(): JSX.Element {
     if (Platform.OS === "android") {
       StatusBar.setBackgroundColor('rgba(0,0,0,0)');
       StatusBar.setTranslucent(true);
-
-      const checkPermission = async () => {
-        try {
-          check(PERMISSIONS.ANDROID.CAMERA).then((result) => {
-            switch (result) {
-              case RESULTS.BLOCKED:
-              case RESULTS.DENIED:
-                PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-                break;
-            }
-          });
-        }
-        catch {
-
-        }
-      }
-
-      checkPermission();
     }
   }, []);
 

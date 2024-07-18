@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
-import { View, Image, StyleSheet, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
+import { Platform,View, Image, StyleSheet, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useUnmountBrightness } from '@reeq/react-native-device-brightness';
 import { useNavigation } from '@react-navigation/native';
@@ -120,8 +120,8 @@ const UserQRBarCode = (props) => {
   return (
     <View style={{ borderColor: 'red', width: '100%', height: 250, alignItems: 'center' }}>
       {qrcodeUrl &&
-        <View style={{ height: 265, width: '100%', }}>
-          <View style={styles.page}>
+        <View style={Platform.OS === 'android' ? { height: 265, width: '100%' } : { height: 245, width: '100%' }}>
+        <View style={styles.page}>
             <View
               style={[styles.container, {
                 width: 200,
@@ -167,12 +167,12 @@ const UserQRBarCode = (props) => {
             </View>
             {qrEncrypt && state.status === "TIMER" && (
             <View style={styles.timer}>
-              <Text style={{ fontSize: 18, color: "#000" }}>{hhmmss(state?.seconds)}</Text>
+              <Text style={Platform.OS === 'android' ? {fontSize: 18, color: "#000"} : {fontSize: 20, color: "#000"} }>{hhmmss(state?.seconds)}</Text>
             </View>
           )}
           {qrEncrypt && state.status === "BLOCK" &&
             <View style={styles.timer}>
-              <Text style={{ fontSize: 18 }}>{" "}</Text>
+              <Text style={{ fontSize: 20 }}>{" "}</Text>
             </View>
           }
           </View>
