@@ -71,7 +71,7 @@ const More = ({ navigation }) => {
 
   const setLogOut = async () => {
     //로그아웃시 푸시 부분 DB 에서 삭제 해야 할듯(추후 사용 여부 확인 - HJN[20230209])
-    await APIDevice.DeleteGCM(userInfo.idno);
+    //await APIDevice.DeleteGCM(userInfo.idno);
 
     logout(() => ({
       loc2: null,
@@ -97,19 +97,31 @@ const More = ({ navigation }) => {
     }));
     setLoginState({ idno: null });
     
-    await AsyncStorage.removeItem('appPUSHTYPE');
-    await AsyncStorage.removeItem('appKYDC');
-    await AsyncStorage.removeItem('appAUTOLOGIN');
-    await AsyncStorage.removeItem('appCARDTYPE');
+    new Promise((res, rej) => {
+      const resultFirst = async() => {
+        AsyncStorage.removeItem('appPUSHTYPE');
+        AsyncStorage.removeItem('appMSCL');
+        AsyncStorage.removeItem('appAUTOLOGIN');
+        AsyncStorage.removeItem('appCARDTYPE');
 
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [
-          { name: 'MainTab' },
-        ]
-      })
-    );
+        return 0;
+      }
+
+      const d = resultFirst();
+      if (d === 0) {
+        res();
+      }
+    })
+    .then(() => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            { name: 'MainTab' },
+          ]
+        })
+      );
+    });
   }
 
   if (userInfo == null) {

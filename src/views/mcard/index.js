@@ -68,7 +68,7 @@ const MCard = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.footer}>
-            <Text style={{ color: '#fff', fontSize: 14 }}>{cardDesc}</Text>
+            <Text style={Platform.OS ==='android' ? { color: '#fff', fontSize: 14 } : { color: '#fff', fontSize: 17 }}>{cardDesc}</Text>
           </View>
       </ScrollView>
     </SafeAreaView>

@@ -38,6 +38,15 @@ const Login = (props) => {
   const setLogin = async () => {
     setIsLoading(true);
     Keyboard.dismiss();
+
+    if (!txtIdno || !txtPW) {
+      Alert.alert('로그인', 'ID/PW를 입력해주세요', [{ text: '확인' }], {
+        cancelable: false,
+      });
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const result = await APILogin.Login(txtIdno, txtPW);
       const data = result.MobileLoginResult;
@@ -81,14 +90,16 @@ const Login = (props) => {
         //자동로그인 여부 저장
         await AsyncStorage.setItem('appAUTOLOGIN', JSON.stringify(isAutoLogin));
       }
-      else {
+      else  {
         Alert.alert('로그인', 'ID/PW를 확인해주세요.', [{ text: '확인' }], {
           cancelable: false,
         });
         setIsLoading(false);
+        return;
       }
     }
     catch (e){
+      console.log(4)
       console.log("로그: "+e);
       Alert.alert('로그인', '로그를 확인해주세요', [{ text: '확인' }], {
         cancelable: false,
