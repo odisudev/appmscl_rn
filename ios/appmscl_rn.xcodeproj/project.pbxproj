@@ -493,6 +493,7 @@
 				DEVELOPMENT_TEAM = 6R9497646B;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = appmscl_rn/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "명성교회 도서관 모바일 회원증";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -520,7 +521,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6R9497646B;
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				INFOPLIST_FILE = appmscl_rn/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "명성교회 도서관 모바일 회원증";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "android:release" : "react-native build-android --mode=release",
+    "android:release": "react-native build-android --mode=release",
     "ios": "react-native run-ios",
     "ios:release": "react-native build ios --configuration Release",
     "lint": "eslint .",
@@ -72,13 +72,11 @@
     "babel-jest": "^29.6.3",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
-    "metro-react-native-babel-preset": "0.76.7",
     "prettier": "2.8.8",
     "react-test-renderer": "18.2.0",
     "typescript": "5.0.4"
   },
   "engines": {
     "node": ">=18"
-  },
-  "packageManager": "yarn@3.6.4"
+  }
 }
