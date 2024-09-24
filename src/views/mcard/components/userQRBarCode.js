@@ -81,10 +81,12 @@ const UserQRBarCode = (props) => {
       item = await APIDevice.GetQRBarCode(userInfo.idno, "", 'qrcode', "140", "140", "0");
     }
     if (item != null) {
-      if (item.statusCode == 0 && item.data != "") {
+      if (item.statusCode == 0 && item.data != "" && item.data !== "바코드 생성 오류") {
         setQRCodeUrl(item.data);
       }
-
+      else {
+        setQRCodeUrl(null);
+      }
     }
   };
 
