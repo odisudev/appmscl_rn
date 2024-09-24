@@ -1,7 +1,7 @@
 module.exports = {
     LOC: "MSCL",
     LOC_NAME: "명성교회 도서관 모바일 회원증",
-    Version: "5.0.0",
+    Version: "1.0.1",
     PROTOCOL: "http",
     DOMAIN: "www.mslib.or.kr/",
     BASE_URL: "http://www.mslib.or.kr/", // ODISUService, BLO
