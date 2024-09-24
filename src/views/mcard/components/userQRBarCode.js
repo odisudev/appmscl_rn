@@ -85,7 +85,7 @@ const UserQRBarCode = (props) => {
         setQRCodeUrl(item.data);
       }
       else {
-        setQRCodeUrl(null);
+        dispatch({ type: "BLOCK" });
       }
     }
   };
